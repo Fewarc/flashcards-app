@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { flashcard_categories_data } from "@/lib/config";
 import { type FlashcardCategory } from "@/types";
+import { api } from "@/trpc/react";
 
 type NewFlashcardAnswerPart = Omit<
   FlashcardAnswerContent,
@@ -41,6 +42,7 @@ export default function CreateNewFlashcard() {
     DEFAULT_NEW_ANSWER_PART,
   ]);
 
+  // TODO: fix - strategy
   const findAndUpdateType = useCallback(
     (index: number) => (type: FlashcardAnswerType) => {
       const answers = [...answerParts];
@@ -77,6 +79,13 @@ export default function CreateNewFlashcard() {
     [answerParts],
   );
 
+  const { mutate: createFlashcard, isPending: loading } =
+    api.flashcard.create.useMutation({
+      onSuccess: () => {
+        console.log("Flashcard created");
+      },
+    });
+
   return (
     <ScreenContainer>
       <div className="flex w-full flex-row gap-x-4">
@@ -96,7 +105,14 @@ export default function CreateNewFlashcard() {
           </Flashcard>
           <div className="mt-8 flex flex-row items-center gap-x-4">
             <Button
-              onClick={() => null}
+              onClick={() =>
+                createFlashcard({
+                  question: questionContent,
+                  catagory: flashcardCategory,
+                  answer: answerParts,
+                })
+              }
+              loading={loading}
               disabled={
                 !questionContent.length ||
                 answerParts.some((answerPart) => !answerPart.content.length) ||

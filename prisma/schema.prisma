@@ -26,12 +26,9 @@ model FlashcardAnswerContent {
 
 model Flashcard {
     id        String                   @id @default(cuid()) @map("_id")
-    name      String
     question  String
     answer    FlashcardAnswerContent[]
     createdAt DateTime                 @default(now())
     updatedAt DateTime                 @updatedAt
     category  String
-
-    @@index([name])
 }
