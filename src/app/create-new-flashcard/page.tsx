@@ -42,6 +42,9 @@ export default function CreateNewFlashcard() {
     DEFAULT_NEW_ANSWER_PART,
   ]);
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  // const { push } = useRouter();
+
   // TODO: fix - strategy
   const findAndUpdateType = useCallback(
     (index: number) => (type: FlashcardAnswerType) => {
@@ -79,10 +82,16 @@ export default function CreateNewFlashcard() {
     [answerParts],
   );
 
+  const reset = () => {
+    setAnswerParts([DEFAULT_NEW_ANSWER_PART]);
+    setQuestionContent("");
+  };
+
   const { mutate: createFlashcard, isPending: loading } =
     api.flashcard.create.useMutation({
       onSuccess: () => {
-        console.log("Flashcard created");
+        // push(`${config.routes.LEARN}/${flashcardCategory}`);
+        reset();
       },
     });
 
