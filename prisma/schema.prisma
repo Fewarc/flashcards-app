@@ -31,4 +31,5 @@ model Flashcard {
     createdAt DateTime                 @default(now())
     updatedAt DateTime                 @updatedAt
     category  String
+    markdown  String?
 }

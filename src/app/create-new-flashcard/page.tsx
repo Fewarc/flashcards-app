@@ -22,6 +22,8 @@ import {
 import { flashcard_categories_data } from "@/lib/config";
 import { type FlashcardCategory } from "@/types";
 import { api } from "@/trpc/react";
+import MDEditor from "@uiw/react-md-editor";
+import { Toggle } from "@/components/ui/toggle";
 
 type NewFlashcardAnswerPart = Omit<
   FlashcardAnswerContent,
@@ -29,6 +31,8 @@ type NewFlashcardAnswerPart = Omit<
 >;
 
 type NewFlashCardCategory = Exclude<FlashcardCategory, "all">;
+
+type AnswerType = "markdown" | "defualt";
 
 const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
   content: "",
@@ -43,6 +47,8 @@ export default function CreateNewFlashcard() {
   const [answerParts, setAnswerParts] = useState<NewFlashcardAnswerPart[]>([
     DEFAULT_NEW_ANSWER_PART,
   ]);
+  const [markdown, setMarkdown] = useState<string | undefined>();
+  const [answerType, setAnswerType] = useState<AnswerType>("markdown");
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   // const { push } = useRouter();
@@ -122,6 +128,7 @@ export default function CreateNewFlashcard() {
                   question: questionContent,
                   catagory: flashcardCategory,
                   answer: answerParts,
+                  markdown,
                 })
               }
               loading={loading}
@@ -165,28 +172,57 @@ export default function CreateNewFlashcard() {
           className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-y-auto px-2 py-4"
           onFocus={() => setAnswersFocused(true)}
         >
-          {answerParts.map((answerPart, index) => (
-            <AnswerPart
-              key={index}
-              index={index}
-              onContentChange={findAndUpdateContent(index)}
-              content={answerPart.content}
-              onTypeChange={findAndUpdateType(index)}
-              onDelete={() => findAndDelete(index)}
-              type={answerPart.type}
-            />
-          ))}
-          <div
-            className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-slate-200 py-2 text-slate-200 hover:border-slate-400 hover:text-slate-400"
-            onClick={() =>
-              setAnswerParts((answerParts) => [
-                ...answerParts,
-                DEFAULT_NEW_ANSWER_PART,
-              ])
-            }
-          >
-            <PlusCircle />
+          <div className="flex flex-row gap-x-4">
+            <Toggle
+              pressed={answerType === "defualt"}
+              variant="outline"
+              onClick={() => setAnswerType("defualt")}
+            >
+              Default
+            </Toggle>
+            <Toggle
+              pressed={answerType === "markdown"}
+              variant="outline"
+              onClick={() => setAnswerType("markdown")}
+            >
+              Markdown
+            </Toggle>
           </div>
+          {answerType === "defualt" ? (
+            <>
+              {answerParts.map((answerPart, index) => (
+                <AnswerPart
+                  key={index}
+                  index={index}
+                  onContentChange={findAndUpdateContent(index)}
+                  content={answerPart.content}
+                  onTypeChange={findAndUpdateType(index)}
+                  onDelete={() => findAndDelete(index)}
+                  type={answerPart.type}
+                />
+              ))}
+              <div
+                className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-slate-200 py-2 text-slate-200 hover:border-slate-400 hover:text-slate-400"
+                onClick={() =>
+                  setAnswerParts((answerParts) => [
+                    ...answerParts,
+                    DEFAULT_NEW_ANSWER_PART,
+                  ])
+                }
+              >
+                <PlusCircle />
+              </div>
+            </>
+          ) : (
+            <div data-color-mode="light">
+              <MDEditor
+                height={700}
+                value={markdown}
+                onChange={setMarkdown}
+                preview="edit"
+              />
+            </div>
+          )}
         </div>
       </div>
     </ScreenContainer>
