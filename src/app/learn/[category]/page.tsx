@@ -53,7 +53,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
     }
   };
 
-  console.log(savedFlashcards);
+  console.log(flashcards, flashcards?.length);
 
   const incrementCursor = () => {
     setAnswerRevealed(false);
@@ -77,7 +77,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
                 <div className="flex flex-row items-center gap-x-4">
                   <Button
                     onClick={decrementCursor}
-                    disabled={cursor === 0}
+                    disabled={!flashcards.length || cursor === 0}
                     variant="ghost"
                   >
                     <ChevronLeft size={32} />
@@ -87,11 +87,15 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
                     onClick={() => setAnswerRevealed(!answerRevealed)}
                     className="cursor-pointer"
                   >
-                    {flashcards[cursor]?.question}
+                    <div className="px-4 text-justify font-semibold">
+                      {flashcards[cursor]?.question}
+                    </div>
                   </Flashcard>
                   <Button
                     onClick={incrementCursor}
-                    disabled={cursor === flashcards.length - 1}
+                    disabled={
+                      !flashcards.length || cursor === flashcards.length - 1
+                    }
                     variant="ghost"
                   >
                     <ChevronRight size={32} />

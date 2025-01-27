@@ -104,14 +104,15 @@ export default function CreateNewFlashcard() {
           className="flex w-full flex-grow flex-col items-center justify-center"
           onClick={() => setAnswersFocused(false)}
         >
+          <Input
+            value={questionContent}
+            onChange={(event) => setQuestionContent(event.target.value)}
+            placeholder="Question"
+            className="mb-8 font-semibold"
+          />
           <Flashcard isFlipped={answersFocused}>
-            <div className="w-full px-6">
-              <Input
-                value={questionContent}
-                onChange={(event) => setQuestionContent(event.target.value)}
-                placeholder="Question"
-                className="font-semibold"
-              />
+            <div className="w-full px-4 text-justify font-semibold">
+              {questionContent}
             </div>
           </Flashcard>
           <div className="mt-8 flex flex-row items-center gap-x-4">
