@@ -19,7 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { flashcard_categories } from "@/lib/config";
+import { flashcard_categories_data } from "@/lib/config";
 import { type FlashcardCategory } from "@/types";
 
 type NewFlashcardAnswerPart = Omit<
@@ -108,21 +108,25 @@ export default function CreateNewFlashcard() {
             <DropdownMenu>
               <DropdownMenuTrigger className="focus:outline-none">
                 <div className="flex flex-row gap-x-4">
-                  <p>{flashcardCategory}</p>
+                  <p>{flashcard_categories_data[flashcardCategory].name}</p>
                   <ChevronDown />
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuGroup>
-                  {flashcard_categories.map((category) => (
-                    <DropdownMenuItem
-                      key={category}
-                      onClick={() => setFlashcardCategory(category)}
-                      className="cursor-pointer"
-                    >
-                      {category}
-                    </DropdownMenuItem>
-                  ))}
+                  {Object.entries(flashcard_categories_data).map(
+                    ([key, category]) => (
+                      <DropdownMenuItem
+                        key={key}
+                        onClick={() =>
+                          setFlashcardCategory(key as FlashcardCategory)
+                        }
+                        className="cursor-pointer"
+                      >
+                        {category.name}
+                      </DropdownMenuItem>
+                    ),
+                  )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
