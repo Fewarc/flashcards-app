@@ -15,11 +15,11 @@ export const flashcard_categories = [
 
 export const flashcard_categories_data: Record<
   (typeof flashcard_categories)[number],
-  { name: string; icon: string | null }
+  { name: string; icon: string | null; iconDark?: string }
 > = {
   general: { name: "General", icon: null },
   git: { name: "Git", icon: "git.png" },
   javascript: { name: "JavaScript", icon: "javascript.png" },
-  nextjs: { name: "NextJS", icon: "nextjs.png" },
+  nextjs: { name: "NextJS", icon: "nextjs.png", iconDark: "nextjs_dark.png" },
   typescript: { name: "TypeScript", icon: "typescript.png" },
 };
