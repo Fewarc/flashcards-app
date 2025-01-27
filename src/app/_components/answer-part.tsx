@@ -44,31 +44,25 @@ const AnswerPart: React.FC<AnswerPartProps> = ({
           </Button>
         </div>
         <DropdownMenu>
-          <DropdownMenuTrigger>
-            <div className="py mb-2 flex w-full gap-x-4 rounded-lg border border-slate-200 pl-4 pr-1">
+          <DropdownMenuTrigger className="focus:outline-none">
+            <div className="py mb-2 flex w-full gap-x-4 rounded-lg pl-4 pr-1">
               <p>{type}</p>
-              <ChevronDown strokeWidth={1} />
+              <ChevronDown />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Button
-                  onClick={() => onTypeChange("TEXT")}
-                  variant="ghost"
-                  className="w-full justify-start"
-                >
-                  Text
-                </Button>
+              <DropdownMenuItem
+                onClick={() => onTypeChange("TEXT")}
+                className="cursor-pointer"
+              >
+                Text
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Button
-                  onClick={() => onTypeChange("LISTING")}
-                  variant="ghost"
-                  className="w-full justify-start"
-                >
-                  Listing
-                </Button>
+              <DropdownMenuItem
+                onClick={() => onTypeChange("LISTING")}
+                className="cursor-pointer"
+              >
+                Listing
               </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>

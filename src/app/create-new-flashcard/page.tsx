@@ -10,7 +10,17 @@ import {
 import AnswerPart from "../_components/answer-part";
 import { useCallback, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { PlusCircle } from "lucide-react";
+import { ChevronDown, PlusCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { flashcard_categories } from "@/lib/config";
+import { type FlashcardCategory } from "@/types";
 
 type NewFlashcardAnswerPart = Omit<
   FlashcardAnswerContent,
@@ -23,6 +33,8 @@ const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
 };
 
 export default function CreateNewFlashcard() {
+  const [flashcardCategory, setFlashcardCategory] =
+    useState<FlashcardCategory>("General");
   const [answersFocused, setAnswersFocused] = useState(false);
   const [questionContent, setQuestionContent] = useState("");
   const [answerParts, setAnswerParts] = useState<NewFlashcardAnswerPart[]>([
@@ -69,7 +81,7 @@ export default function CreateNewFlashcard() {
     <ScreenContainer>
       <div className="flex w-full flex-row gap-x-4">
         <div
-          className="flex w-full flex-grow items-center justify-center"
+          className="flex w-full flex-grow flex-col items-center justify-center"
           onClick={() => setAnswersFocused(false)}
         >
           <Flashcard isFlipped={answersFocused}>
@@ -82,8 +94,40 @@ export default function CreateNewFlashcard() {
               />
             </div>
           </Flashcard>
+          <div className="mt-8 flex flex-row items-center gap-x-4">
+            <Button
+              onClick={() => null}
+              disabled={
+                !questionContent.length ||
+                answerParts.some((answerPart) => !answerPart.content.length)
+              }
+            >
+              Save
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="focus:outline-none">
+                <div className="flex flex-row gap-x-4">
+                  <p>{flashcardCategory}</p>
+                  <ChevronDown />
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuGroup>
+                  {flashcard_categories.map((category) => (
+                    <DropdownMenuItem
+                      key={category}
+                      onClick={() => setFlashcardCategory(category)}
+                      className="cursor-pointer"
+                    >
+                      {category}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
-        <Separator orientation="vertical" className="h-[800px]" />
+        <Separator orientation="vertical" className="my-auto h-[800px]" />
         <div
           className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-y-auto px-2 py-4"
           onFocus={() => setAnswersFocused(true)}
