@@ -1,4 +1,5 @@
 import { type FlashcardAnswerContent } from "@prisma/client";
+import MDEditor from "@uiw/react-md-editor";
 
 interface FlashcardAnswerProps {
   answer: FlashcardAnswerContent[];
@@ -16,10 +17,19 @@ const FlashcardsAnswer: React.FC<FlashcardAnswerProps> = ({
           <p key={answerPart.id} className="my-1">
             {answerPart.content}
           </p>
-        ) : (
+        ) : answerPart.type === "LISTING" ? (
           <pre key={answerPart.id} className="my-2">
             {answerPart.content}
           </pre>
+        ) : (
+          <div data-color-mode="light" key={answerPart.id}>
+            <MDEditor
+              height={700}
+              value={answerPart.content}
+              preview="preview"
+              hideToolbar
+            />
+          </div>
         ),
       )}
       {!revealed && (

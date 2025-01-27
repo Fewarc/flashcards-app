@@ -10,7 +10,6 @@ export const createFlashcardInput = z.object({
       type: z.nativeEnum(FlashcardAnswerType),
     }),
   ),
-  markdown: z.string().optional(),
 });
 
 export const createFlashcard = async (
@@ -22,8 +21,7 @@ export const createFlashcard = async (
       data: {
         question: input.question,
         category: input.catagory,
-        answer: { createMany: { data: !!input.markdown ? [] : input.answer } },
-        markdown: input.markdown,
+        answer: { createMany: { data: input.answer } },
       },
     });
   } catch (error) {

@@ -13,6 +13,7 @@ datasource db {
 enum FlashcardAnswerType {
     TEXT
     LISTING
+    MARKDDOWN
 }
 
 model FlashcardAnswerContent {
@@ -31,5 +32,4 @@ model Flashcard {
     createdAt DateTime                 @default(now())
     updatedAt DateTime                 @updatedAt
     category  String
-    markdown  String?
 }

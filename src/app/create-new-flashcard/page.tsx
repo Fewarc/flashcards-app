@@ -93,6 +93,7 @@ export default function CreateNewFlashcard() {
   const reset = () => {
     setAnswerParts([DEFAULT_NEW_ANSWER_PART]);
     setQuestionContent("");
+    setMarkdown(undefined);
   };
 
   const { mutate: createFlashcard, isPending: loading } =
@@ -127,15 +128,26 @@ export default function CreateNewFlashcard() {
                 createFlashcard({
                   question: questionContent,
                   catagory: flashcardCategory,
-                  answer: answerParts,
-                  markdown,
+                  answer:
+                    answerType === "markdown"
+                      ? [
+                          {
+                            content: markdown ?? "",
+                            type: "MARKDDOWN",
+                          },
+                        ]
+                      : answerParts,
                 })
               }
               loading={loading}
               disabled={
                 !questionContent.length ||
-                answerParts.some((answerPart) => !answerPart.content.length) ||
-                !answerParts.length
+                (answerType === "defualt" &&
+                  (answerParts.some(
+                    (answerPart) => !answerPart.content.length,
+                  ) ||
+                    !answerParts.length)) ||
+                (answerType === "markdown" && !markdown?.length)
               }
             >
               Save
