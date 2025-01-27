@@ -10,9 +10,14 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum FlashcardAnswerType {
+    TEXT
+    LISTING
+}
+
 model FlashcardAnswerContent {
-    id      String @id @default(cuid()) @map("_id")
-    type    String
+    id      String              @id @default(cuid()) @map("_id")
+    type    FlashcardAnswerType
     content String
 
     Flashcard   Flashcard? @relation(fields: [flashcardId], references: [id])
@@ -21,11 +26,9 @@ model FlashcardAnswerContent {
 
 model Flashcard {
     id        String                   @id @default(cuid()) @map("_id")
-    name      String
     question  String
     answer    FlashcardAnswerContent[]
     createdAt DateTime                 @default(now())
     updatedAt DateTime                 @updatedAt
-
-    @@index([name])
+    category  String
 }
