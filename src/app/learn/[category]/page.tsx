@@ -20,6 +20,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
   const [isStarted, setIsStarted] = useState(false);
   const [flashcards, setFlashcards] = useState<typeof savedFlashcards>();
   const [cursor, setCursor] = useState(0);
+  const [answerRevealed, setAnswerRevealed] = useState(false);
 
   const { data: savedFlashcards, isPending: loading } =
     api.flashcard.findByCategory.useQuery(
@@ -54,6 +55,16 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
 
   console.log(savedFlashcards);
 
+  const incrementCursor = () => {
+    setAnswerRevealed(false);
+    setCursor(cursor + 1);
+  };
+
+  const decrementCursor = () => {
+    setAnswerRevealed(false);
+    setCursor(cursor - 1);
+  };
+
   return (
     <ScreenContainer>
       <div className="flex w-full flex-row gap-x-4">
@@ -65,15 +76,21 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
               <div className="flex flex-col gap-y-10">
                 <div className="flex flex-row items-center gap-x-4">
                   <Button
-                    onClick={() => setCursor(cursor - 1)}
+                    onClick={decrementCursor}
                     disabled={cursor === 0}
                     variant="ghost"
                   >
                     <ChevronLeft size={32} />
                   </Button>
-                  <Flashcard>{flashcards[cursor]?.question}</Flashcard>
+                  <Flashcard
+                    isFlipped={answerRevealed}
+                    onClick={() => setAnswerRevealed(!answerRevealed)}
+                    className="cursor-pointer"
+                  >
+                    {flashcards[cursor]?.question}
+                  </Flashcard>
                   <Button
-                    onClick={() => setCursor(cursor + 1)}
+                    onClick={incrementCursor}
                     disabled={cursor === flashcards.length - 1}
                     variant="ghost"
                   >
@@ -95,9 +112,12 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
           )}
         </div>
         <Separator orientation="vertical" className="my-auto h-[800px]" />
-        <div className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-y-auto px-2 py-4">
+        <div className="relative flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-visible overflow-y-auto px-2 py-4">
           {flashcards && flashcards[cursor] && (
-            <FlashcardsAnswer answer={flashcards[cursor]?.answer} />
+            <FlashcardsAnswer
+              answer={flashcards[cursor]?.answer}
+              revealed={answerRevealed}
+            />
           )}
         </div>
       </div>

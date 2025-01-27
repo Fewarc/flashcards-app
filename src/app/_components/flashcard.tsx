@@ -6,6 +6,7 @@ interface FlashcardProps {
   isFlipped?: boolean;
   flipOnHover?: boolean;
   answer?: string;
+  onClick?: () => void;
   className?: string;
 }
 
@@ -14,6 +15,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
   isFlipped = false,
   flipOnHover = false,
   answer = "Answer",
+  onClick,
   className,
 }) => {
   return (
@@ -22,6 +24,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
         "group h-96 min-h-44 w-96 rounded-3xl border-none shadow-none [perspective:1000px]",
         className,
       )}
+      onClick={onClick}
     >
       <div
         className={cn(

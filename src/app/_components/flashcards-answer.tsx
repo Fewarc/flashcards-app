@@ -3,13 +3,11 @@ import { type FlashcardAnswerContent } from "@prisma/client";
 interface FlashcardAnswerProps {
   answer: FlashcardAnswerContent[];
   revealed?: boolean;
-  className?: string;
 }
 
 const FlashcardsAnswer: React.FC<FlashcardAnswerProps> = ({
   answer,
   revealed = false,
-  className,
 }) => {
   return (
     <div className="flex flex-col">
@@ -23,6 +21,9 @@ const FlashcardsAnswer: React.FC<FlashcardAnswerProps> = ({
             {answerPart.content}
           </pre>
         ),
+      )}
+      {!revealed && (
+        <div className="absolute left-0 top-0 h-full w-full rounded-lg backdrop-blur-md"></div>
       )}
     </div>
   );
