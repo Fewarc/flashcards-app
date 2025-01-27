@@ -34,7 +34,7 @@ const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
 
 export default function CreateNewFlashcard() {
   const [flashcardCategory, setFlashcardCategory] =
-    useState<FlashcardCategory>("General");
+    useState<FlashcardCategory>("general");
   const [answersFocused, setAnswersFocused] = useState(false);
   const [questionContent, setQuestionContent] = useState("");
   const [answerParts, setAnswerParts] = useState<NewFlashcardAnswerPart[]>([
@@ -99,7 +99,8 @@ export default function CreateNewFlashcard() {
               onClick={() => null}
               disabled={
                 !questionContent.length ||
-                answerParts.some((answerPart) => !answerPart.content.length)
+                answerParts.some((answerPart) => !answerPart.content.length) ||
+                !answerParts.length
               }
             >
               Save
