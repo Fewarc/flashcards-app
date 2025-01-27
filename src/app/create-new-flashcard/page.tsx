@@ -28,6 +28,8 @@ type NewFlashcardAnswerPart = Omit<
   "id" | "flashcardId"
 >;
 
+type NewFlashCardCategory = Exclude<FlashcardCategory, "all">;
+
 const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
   content: "",
   type: "TEXT",
@@ -35,7 +37,7 @@ const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
 
 export default function CreateNewFlashcard() {
   const [flashcardCategory, setFlashcardCategory] =
-    useState<FlashcardCategory>("general");
+    useState<NewFlashCardCategory>("javascript");
   const [answersFocused, setAnswersFocused] = useState(false);
   const [questionContent, setQuestionContent] = useState("");
   const [answerParts, setAnswerParts] = useState<NewFlashcardAnswerPart[]>([
@@ -144,7 +146,7 @@ export default function CreateNewFlashcard() {
                       <DropdownMenuItem
                         key={key}
                         onClick={() =>
-                          setFlashcardCategory(key as FlashcardCategory)
+                          setFlashcardCategory(key as NewFlashCardCategory)
                         }
                         className="cursor-pointer"
                       >
