@@ -6,15 +6,26 @@ generator client {
 }
 
 datasource db {
-    provider = "postgresql"
+    provider = "mongodb"
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
+model FlashcardAnswerContent {
+    id      String @id @default(cuid()) @map("_id")
+    type    String
+    content String
+
+    Flashcard   Flashcard? @relation(fields: [flashcardId], references: [id])
+    flashcardId String?
+}
+
+model Flashcard {
+    id        String                   @id @default(cuid()) @map("_id")
     name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    question  String
+    answer    FlashcardAnswerContent[]
+    createdAt DateTime                 @default(now())
+    updatedAt DateTime                 @updatedAt
 
     @@index([name])
 }
