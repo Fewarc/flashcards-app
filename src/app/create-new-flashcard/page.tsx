@@ -1,5 +1,8 @@
 "use client";
 
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import "highlight.js/styles/github.css";
 import ScreenContainer from "../_components/screen-container";
 import Flashcard from "../_components/flashcard";
 import { Separator } from "@/components/ui/separator";
@@ -24,6 +27,7 @@ import { type FlashcardCategory } from "@/types";
 import { api } from "@/trpc/react";
 import MDEditor from "@uiw/react-md-editor";
 import { Toggle } from "@/components/ui/toggle";
+const rehypeHighlight = require("rehype-highlight").default;
 
 type NewFlashcardAnswerPart = Omit<
   FlashcardAnswerContent,
@@ -232,6 +236,9 @@ export default function CreateNewFlashcard() {
                 value={markdown}
                 onChange={setMarkdown}
                 preview="edit"
+                previewOptions={{
+                  rehypePlugins: [rehypeHighlight],
+                }}
               />
             </div>
           )}

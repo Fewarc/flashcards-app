@@ -1,5 +1,9 @@
 import { type FlashcardAnswerContent } from "@prisma/client";
-import MDEditor from "@uiw/react-md-editor";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import MarkdownPreview from "@uiw/react-markdown-preview";
+const rehypeHighlight = require("rehype-highlight").default;
 
 interface FlashcardAnswerProps {
   answer: FlashcardAnswerContent[];
@@ -23,11 +27,9 @@ const FlashcardsAnswer: React.FC<FlashcardAnswerProps> = ({
           </pre>
         ) : (
           <div data-color-mode="light" key={answerPart.id}>
-            <MDEditor
-              height={700}
-              value={answerPart.content}
-              preview="preview"
-              hideToolbar
+            <MarkdownPreview
+              source={answerPart.content}
+              rehypePlugins={[rehypeHighlight]}
             />
           </div>
         ),

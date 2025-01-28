@@ -12,6 +12,8 @@ export const flashcard_categories = [
   "git",
   "nextjs",
   "react",
+  "css",
+  "other",
 ] as const;
 
 export const flashcard_categories_data: Record<
@@ -24,4 +26,6 @@ export const flashcard_categories_data: Record<
   nextjs: { name: "NextJS", icon: "nextjs.png", iconDark: "nextjs_dark.png" },
   typescript: { name: "TypeScript", icon: "typescript.png" },
   react: { name: "React", icon: "react.png" },
+  css: { name: "CSS", icon: "css.png" },
+  other: { name: "Other", icon: "other.png" },
 };
