@@ -13,6 +13,7 @@ datasource db {
 enum FlashcardAnswerType {
     TEXT
     LISTING
+    MARKDDOWN
 }
 
 model FlashcardAnswerContent {
@@ -20,7 +21,7 @@ model FlashcardAnswerContent {
     type    FlashcardAnswerType
     content String
 
-    Flashcard   Flashcard? @relation(fields: [flashcardId], references: [id])
+    Flashcard   Flashcard? @relation(fields: [flashcardId], references: [id], onDelete: Cascade)
     flashcardId String?
 }
 

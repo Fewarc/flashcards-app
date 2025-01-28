@@ -1,5 +1,8 @@
 "use client";
 
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import "highlight.js/styles/github.css";
 import ScreenContainer from "../_components/screen-container";
 import Flashcard from "../_components/flashcard";
 import { Separator } from "@/components/ui/separator";
@@ -22,11 +25,18 @@ import {
 import { flashcard_categories_data } from "@/lib/config";
 import { type FlashcardCategory } from "@/types";
 import { api } from "@/trpc/react";
+import MDEditor from "@uiw/react-md-editor";
+import { Toggle } from "@/components/ui/toggle";
+const rehypeHighlight = require("rehype-highlight").default;
 
 type NewFlashcardAnswerPart = Omit<
   FlashcardAnswerContent,
   "id" | "flashcardId"
 >;
+
+type NewFlashCardCategory = Exclude<FlashcardCategory, "all">;
+
+type AnswerType = "markdown" | "defualt";
 
 const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
   content: "",
@@ -35,12 +45,14 @@ const DEFAULT_NEW_ANSWER_PART: NewFlashcardAnswerPart = {
 
 export default function CreateNewFlashcard() {
   const [flashcardCategory, setFlashcardCategory] =
-    useState<FlashcardCategory>("general");
+    useState<NewFlashCardCategory>("javascript");
   const [answersFocused, setAnswersFocused] = useState(false);
   const [questionContent, setQuestionContent] = useState("");
   const [answerParts, setAnswerParts] = useState<NewFlashcardAnswerPart[]>([
     DEFAULT_NEW_ANSWER_PART,
   ]);
+  const [markdown, setMarkdown] = useState<string | undefined>();
+  const [answerType, setAnswerType] = useState<AnswerType>("markdown");
 
   // eslint-disable-next-line @typescript-eslint/unbound-method
   // const { push } = useRouter();
@@ -85,6 +97,7 @@ export default function CreateNewFlashcard() {
   const reset = () => {
     setAnswerParts([DEFAULT_NEW_ANSWER_PART]);
     setQuestionContent("");
+    setMarkdown(undefined);
   };
 
   const { mutate: createFlashcard, isPending: loading } =
@@ -102,14 +115,15 @@ export default function CreateNewFlashcard() {
           className="flex w-full flex-grow flex-col items-center justify-center"
           onClick={() => setAnswersFocused(false)}
         >
+          <Input
+            value={questionContent}
+            onChange={(event) => setQuestionContent(event.target.value)}
+            placeholder="Question"
+            className="mb-8 font-semibold"
+          />
           <Flashcard isFlipped={answersFocused}>
-            <div className="w-full px-6">
-              <Input
-                value={questionContent}
-                onChange={(event) => setQuestionContent(event.target.value)}
-                placeholder="Question"
-                className="font-semibold"
-              />
+            <div className="w-full px-4 text-justify font-semibold">
+              {questionContent}
             </div>
           </Flashcard>
           <div className="mt-8 flex flex-row items-center gap-x-4">
@@ -118,14 +132,26 @@ export default function CreateNewFlashcard() {
                 createFlashcard({
                   question: questionContent,
                   catagory: flashcardCategory,
-                  answer: answerParts,
+                  answer:
+                    answerType === "markdown"
+                      ? [
+                          {
+                            content: markdown ?? "",
+                            type: "MARKDDOWN",
+                          },
+                        ]
+                      : answerParts,
                 })
               }
               loading={loading}
               disabled={
                 !questionContent.length ||
-                answerParts.some((answerPart) => !answerPart.content.length) ||
-                !answerParts.length
+                (answerType === "defualt" &&
+                  (answerParts.some(
+                    (answerPart) => !answerPart.content.length,
+                  ) ||
+                    !answerParts.length)) ||
+                (answerType === "markdown" && !markdown?.length)
               }
             >
               Save
@@ -144,7 +170,7 @@ export default function CreateNewFlashcard() {
                       <DropdownMenuItem
                         key={key}
                         onClick={() =>
-                          setFlashcardCategory(key as FlashcardCategory)
+                          setFlashcardCategory(key as NewFlashCardCategory)
                         }
                         className="cursor-pointer"
                       >
@@ -162,28 +188,60 @@ export default function CreateNewFlashcard() {
           className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-y-auto px-2 py-4"
           onFocus={() => setAnswersFocused(true)}
         >
-          {answerParts.map((answerPart, index) => (
-            <AnswerPart
-              key={index}
-              index={index}
-              onContentChange={findAndUpdateContent(index)}
-              content={answerPart.content}
-              onTypeChange={findAndUpdateType(index)}
-              onDelete={() => findAndDelete(index)}
-              type={answerPart.type}
-            />
-          ))}
-          <div
-            className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-slate-200 py-2 text-slate-200 hover:border-slate-400 hover:text-slate-400"
-            onClick={() =>
-              setAnswerParts((answerParts) => [
-                ...answerParts,
-                DEFAULT_NEW_ANSWER_PART,
-              ])
-            }
-          >
-            <PlusCircle />
+          <div className="flex flex-row gap-x-4">
+            <Toggle
+              pressed={answerType === "defualt"}
+              variant="outline"
+              onClick={() => setAnswerType("defualt")}
+            >
+              Default
+            </Toggle>
+            <Toggle
+              pressed={answerType === "markdown"}
+              variant="outline"
+              onClick={() => setAnswerType("markdown")}
+            >
+              Markdown
+            </Toggle>
           </div>
+          {answerType === "defualt" ? (
+            <>
+              {answerParts.map((answerPart, index) => (
+                <AnswerPart
+                  key={index}
+                  index={index}
+                  onContentChange={findAndUpdateContent(index)}
+                  content={answerPart.content}
+                  onTypeChange={findAndUpdateType(index)}
+                  onDelete={() => findAndDelete(index)}
+                  type={answerPart.type}
+                />
+              ))}
+              <div
+                className="flex cursor-pointer items-center justify-center rounded-lg border-2 border-dashed border-slate-200 py-2 text-slate-200 hover:border-slate-400 hover:text-slate-400"
+                onClick={() =>
+                  setAnswerParts((answerParts) => [
+                    ...answerParts,
+                    DEFAULT_NEW_ANSWER_PART,
+                  ])
+                }
+              >
+                <PlusCircle />
+              </div>
+            </>
+          ) : (
+            <div data-color-mode="light">
+              <MDEditor
+                height={700}
+                value={markdown}
+                onChange={setMarkdown}
+                preview="edit"
+                previewOptions={{
+                  rehypePlugins: [rehypeHighlight],
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
     </ScreenContainer>

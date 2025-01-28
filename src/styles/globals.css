@@ -13,3 +13,8 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
+
+.w-md-editor-text-input,
+.w-md-editor-text {
+  height: 100%;
+}
