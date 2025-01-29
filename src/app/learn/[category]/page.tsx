@@ -48,12 +48,11 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
       const shuffledFlashcards = [
         ...flashcards.sort(() => 0.5 - Math.random()),
       ];
+      setAnswerRevealed(false);
       setFlashcards(shuffledFlashcards);
       setCursor(0);
     }
   };
-
-  console.log(flashcards, flashcards?.length);
 
   const incrementCursor = () => {
     setAnswerRevealed(false);
@@ -68,7 +67,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
   return (
     <ScreenContainer>
       <div className="flex w-full flex-row gap-x-4">
-        <div className="flex w-full flex-grow flex-col items-center justify-center">
+        <div className="flex w-fit flex-col items-center justify-center">
           {isStarted ? (
             loading || !flashcards ? (
               <SpinnerLoader />
@@ -115,11 +114,15 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
             <Button onClick={() => setIsStarted(true)}>Start</Button>
           )}
         </div>
-        <Separator orientation="vertical" className="my-auto h-[800px]" />
-        <div className="relative flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-visible overflow-y-auto px-2 py-4">
+        {isStarted && !loading && (
+          <Separator orientation="vertical" className="my-auto h-[800px]" />
+        )}
+        <div className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-visible overflow-y-auto px-8 py-4">
           {flashcards && flashcards[cursor] && (
             <FlashcardsAnswer
               answer={flashcards[cursor]?.answer}
+              question={flashcards[cursor].question}
+              onReveal={() => setAnswerRevealed(true)}
               revealed={answerRevealed}
             />
           )}

@@ -7,15 +7,20 @@ const rehypeHighlight = require("rehype-highlight").default;
 
 interface FlashcardAnswerProps {
   answer: FlashcardAnswerContent[];
+  question: string;
+  onReveal: () => void;
   revealed?: boolean;
 }
 
 const FlashcardsAnswer: React.FC<FlashcardAnswerProps> = ({
   answer,
+  question,
+  onReveal,
   revealed = false,
 }) => {
   return (
-    <div className="flex flex-col">
+    <div className="relative flex flex-col">
+      <p className="mb-4 text-justify text-2xl font-semibold">{question}</p>
       {answer.map((answerPart) =>
         answerPart.type === "TEXT" ? (
           <p key={answerPart.id} className="my-1">
@@ -35,7 +40,10 @@ const FlashcardsAnswer: React.FC<FlashcardAnswerProps> = ({
         ),
       )}
       {!revealed && (
-        <div className="absolute left-0 top-0 h-full w-full rounded-lg backdrop-blur-md"></div>
+        <div
+          className="absolute left-0 top-0 h-full w-full cursor-pointer rounded-lg backdrop-blur-md"
+          onClick={onReveal}
+        ></div>
       )}
     </div>
   );

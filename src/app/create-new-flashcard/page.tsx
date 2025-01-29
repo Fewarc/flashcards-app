@@ -22,7 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { flashcard_categories_data } from "@/lib/config";
+import { flashcard_categories, flashcard_categories_data } from "@/lib/config";
 import { type FlashcardCategory } from "@/types";
 import { api } from "@/trpc/react";
 import MDEditor from "@uiw/react-md-editor";
@@ -166,17 +166,20 @@ export default function CreateNewFlashcard() {
               <DropdownMenuContent>
                 <DropdownMenuGroup>
                   {Object.entries(flashcard_categories_data).map(
-                    ([key, category]) => (
-                      <DropdownMenuItem
-                        key={key}
-                        onClick={() =>
-                          setFlashcardCategory(key as NewFlashCardCategory)
-                        }
-                        className="cursor-pointer"
-                      >
-                        {category.name}
-                      </DropdownMenuItem>
-                    ),
+                    ([key, category]) => {
+                      if (key !== flashcard_categories[0])
+                        return (
+                          <DropdownMenuItem
+                            key={key}
+                            onClick={() =>
+                              setFlashcardCategory(key as NewFlashCardCategory)
+                            }
+                            className="cursor-pointer"
+                          >
+                            {category.name}
+                          </DropdownMenuItem>
+                        );
+                    },
                   )}
                 </DropdownMenuGroup>
               </DropdownMenuContent>
