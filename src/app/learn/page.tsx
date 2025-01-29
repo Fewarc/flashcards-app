@@ -3,7 +3,6 @@ import ScreenContainer from "../_components/screen-container";
 import { Code } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { type FlashcardCategory } from "@/types";
 
 const ICON_SIZE = 64;
 
@@ -20,7 +19,7 @@ export default async function Learn() {
           >
             {!!category.icon ? (
               <Image
-                src={`/${(key as FlashcardCategory) === "nextjs" ? category.iconDark : category.icon}`}
+                src={`/${!!category.iconDark ? category.iconDark : category.icon}`}
                 alt={`${category.name} icon`}
                 width={ICON_SIZE}
                 height={ICON_SIZE}

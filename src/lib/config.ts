@@ -13,6 +13,8 @@ export const flashcard_categories = [
   "nextjs",
   "react",
   "css",
+  "docker",
+  "aws",
   "other",
 ] as const;
 
@@ -26,6 +28,8 @@ export const flashcard_categories_data: Record<
   nextjs: { name: "NextJS", icon: "nextjs.png", iconDark: "nextjs_dark.png" },
   typescript: { name: "TypeScript", icon: "typescript.png" },
   react: { name: "React", icon: "react.png" },
-  css: { name: "CSS", icon: "css.png" },
+  css: { name: "CSS", icon: "css.png", iconDark: "css_dark.png" },
+  docker: { name: "Docker", icon: "docker.png" },
+  aws: { name: "AWS", icon: "aws.png" },
   other: { name: "Other", icon: "other.png" },
 };
