@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { FlashcardCategory } from "@/types";
 
 interface FlashcardProps {
   children?: React.ReactNode;
@@ -7,6 +8,7 @@ interface FlashcardProps {
   flipOnHover?: boolean;
   answer?: string;
   onClick?: () => void;
+  category: FlashcardCategory;
   className?: string;
 }
 
@@ -16,6 +18,7 @@ const Flashcard: React.FC<FlashcardProps> = ({
   flipOnHover = false,
   answer = "Answer",
   onClick,
+  category,
   className,
 }) => {
   return (
@@ -39,6 +42,9 @@ const Flashcard: React.FC<FlashcardProps> = ({
         <div className="absolute inset-0 h-full w-full rounded-xl [backface-visibility:hidden]">
           <div className="flex h-full items-center justify-center">
             {children}
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 transform rounded-xl bg-black px-3 py-0.5 text-xs font-semibold text-white">
+              {category}
+            </div>
           </div>
         </div>
         {/* Back Face */}

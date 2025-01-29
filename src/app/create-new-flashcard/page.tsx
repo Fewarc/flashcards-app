@@ -121,7 +121,7 @@ export default function CreateNewFlashcard() {
             placeholder="Question"
             className="mb-8 font-semibold"
           />
-          <Flashcard isFlipped={answersFocused}>
+          <Flashcard isFlipped={answersFocused} category={flashcardCategory}>
             <div className="w-full px-4 text-justify font-semibold">
               {questionContent}
             </div>

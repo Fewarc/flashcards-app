@@ -81,15 +81,20 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
                   >
                     <ChevronLeft size={32} />
                   </Button>
-                  <Flashcard
-                    isFlipped={answerRevealed}
-                    onClick={() => setAnswerRevealed(!answerRevealed)}
-                    className="cursor-pointer"
-                  >
-                    <div className="px-4 text-justify font-semibold">
-                      {flashcards[cursor]?.question}
-                    </div>
-                  </Flashcard>
+                  {!!flashcards[cursor] && (
+                    <Flashcard
+                      isFlipped={answerRevealed}
+                      onClick={() => setAnswerRevealed(!answerRevealed)}
+                      category={
+                        flashcards[cursor]?.category as FlashcardCategory
+                      }
+                      className="cursor-pointer"
+                    >
+                      <div className="px-4 text-justify font-semibold">
+                        {flashcards[cursor]?.question}
+                      </div>
+                    </Flashcard>
+                  )}
                   <Button
                     onClick={incrementCursor}
                     disabled={
@@ -122,7 +127,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
             <FlashcardsAnswer
               answer={flashcards[cursor]?.answer}
               question={flashcards[cursor].question}
-              onReveal={() => setAnswerRevealed(true)}
+              onReveal={() => isStarted && setAnswerRevealed(true)}
               revealed={answerRevealed}
             />
           )}
