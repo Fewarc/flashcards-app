@@ -29,6 +29,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
       },
       {
         enabled: !!category && isStarted,
+        refetchOnWindowFocus: false,
       },
     );
 
