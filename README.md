@@ -13,3 +13,4 @@ Technologies used in the project:
 *   Prisma
 *   tRPC
 *   MongoDB via Atlas
+*   TailwindCSS
