@@ -29,6 +29,7 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
       },
       {
         enabled: !!category && isStarted,
+        refetchOnWindowFocus: false,
       },
     );
 
@@ -67,11 +68,11 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
   return (
     <ScreenContainer>
       <div className="flex w-full flex-row gap-x-4">
-        <div className="flex w-fit flex-col items-center justify-center">
-          {isStarted ? (
-            loading || !flashcards ? (
-              <SpinnerLoader />
-            ) : (
+        {isStarted ? (
+          loading || !flashcards ? (
+            <SpinnerLoader className="absolute left-1/2 top-1/2" />
+          ) : (
+            <div className="flex w-fit flex-col items-center justify-center">
               <div className="flex flex-col gap-y-10">
                 <div className="flex flex-row items-center gap-x-4">
                   <Button
@@ -114,24 +115,28 @@ const Learn: React.FC<LearnProps> = ({ params }) => {
                   </Button>
                 </div>
               </div>
-            )
-          ) : (
+            </div>
+          )
+        ) : (
+          <div className="flex w-full justify-center">
             <Button onClick={() => setIsStarted(true)}>Start</Button>
-          )}
-        </div>
+          </div>
+        )}
         {isStarted && !loading && (
           <Separator orientation="vertical" className="my-auto h-[800px]" />
         )}
-        <div className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-visible overflow-y-auto px-8 py-4">
-          {flashcards && flashcards[cursor] && (
-            <FlashcardsAnswer
-              answer={flashcards[cursor]?.answer}
-              question={flashcards[cursor].question}
-              onReveal={() => isStarted && setAnswerRevealed(true)}
-              revealed={answerRevealed}
-            />
-          )}
-        </div>
+        {isStarted && (
+          <div className="flex max-h-screen w-full flex-grow flex-col gap-y-4 overflow-visible overflow-y-auto px-8 py-4">
+            {flashcards && flashcards[cursor] && (
+              <FlashcardsAnswer
+                answer={flashcards[cursor]?.answer}
+                question={flashcards[cursor].question}
+                onReveal={() => isStarted && setAnswerRevealed(true)}
+                revealed={answerRevealed}
+              />
+            )}
+          </div>
+        )}
       </div>
     </ScreenContainer>
   );
