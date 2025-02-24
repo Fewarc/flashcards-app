@@ -15,6 +15,11 @@ export const flashcard_categories = [
   "css",
   "docker",
   "aws",
+  "frontend",
+  "js-roadmap",
+  "react-roadmap",
+  "ts-roadmap",
+  "nodejs-roadmap",
   "other",
 ] as const;
 
@@ -31,5 +36,10 @@ export const flashcard_categories_data: Record<
   css: { name: "CSS", icon: "css.png", iconDark: "css_dark.png" },
   docker: { name: "Docker", icon: "docker.png" },
   aws: { name: "AWS", icon: "aws.png" },
+  frontend: { name: "Front-end", icon: "front-end.png" },
+  "js-roadmap": { name: "JS-roadmap", icon: "javascript-roadmap.png" },
+  "react-roadmap": { name: "React-roadmap", icon: "react-roadmap.png" },
+  "ts-roadmap": { name: "TS-roadmap", icon: "typescript-roadmap.png" },
+  "nodejs-roadmap": { name: "Node.js-roadmap", icon: "nodejs-roadmap.png" },
   other: { name: "Other", icon: "other.png" },
 };
